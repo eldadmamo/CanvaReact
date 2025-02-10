@@ -6,6 +6,10 @@ import {BsImages} from 'react-icons/bs'
 import { RxTransparencyGrid } from 'react-icons/rx';
 import {MdKeyboardArrowLeft} from 'react-icons/md'
 import TemplateDesign from './../components/main/TemplateDesign';
+import MyImages from '../components/MyImages';
+import Projects from '../components/Projects';
+import Images from '../components/Image';
+import { Link } from 'react-router-dom';
 
 const Main = () => {
 
@@ -71,33 +75,43 @@ const Main = () => {
                                 </div>
                             }
                             {
-                                state === 'shape' && <div>
-                                    shape
+                                state === 'shape' && <div className='grid grid-cols-3 gap-2'>
+                                    <div className='h-[90px] bg-[#3c3c3d] cursor-pointer'></div>
+                                    <div className='h-[90px] bg-[#3c3c3d] cursor-pointer rounded-full'></div>
+                                    <div style={{clipPath: 'polygon(50% 0,100% 100%,0 100%)'}} className='h-[90px] bg-[#3c3c3d] cursor-pointer'></div>
                                 </div>
                             }
                             {
-                                state === 'image' && <div>
-                                    uploadImage
-                                </div>
+                                state === 'image' && <MyImages/>
                             }
                             {
                                 state === 'text' && <div>
-                                    text
+                                    <div className='gird grid-cols-1 gap-2'>
+                                        <div className='bg-[#3c3c3d] cursor-pointer font-bold p-3 text-white text-xl rounded-sm'>
+                                            <h2>Add a Text</h2>
+                                        </div>
+                                    </div>
                                 </div>
                             }
                             {
-                                state === 'project' && <div>
-                                    projects
+                                state === 'project' && <Projects/>
+                            }
+                            {
+                                state === 'initImage' && <div className='h-[88vh] overflow-x-auto flex justify-start items-start scrollbar-hide'>
+                                    <Images/>
                                 </div>
                             }
                             {
-                                state === 'initImage' && <div>
-                                    images
-                                </div>
-                            }
-                            {
-                                state === 'background' && <div>
-                                    Background
+                                state === 'background' && <div className='h-[88vh] overflow-x-auto flex justify-start items-start scrollbar-hide w-full'>
+                                    <div className='grid grid-cols-2 gap-2'>
+                                        {
+                                        [1,2,3,4,5,6].map((img,i) => 
+                                        <Link key={i} className='w-full h-[90px] overflow-hidden rounded-sm cursor-pointer'>
+                                            <img className='w-full h-full object-fill' src='http://localhost:5173/images/banner/1.jpg' alt='' />
+                                        </Link>
+                                         )
+                                        }
+                                    </div>
                                 </div>
                             }
                         </div>

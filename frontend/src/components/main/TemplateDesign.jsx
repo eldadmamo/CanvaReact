@@ -1,6 +1,6 @@
 import React from 'react';
 
-const TemplateDesign = () => {
+const TemplateDesign = ({type}) => {
     return (
         <>
             {

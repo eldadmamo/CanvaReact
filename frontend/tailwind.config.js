@@ -17,5 +17,8 @@ module.exports = {
       '2xs': {'max':'340px'},
     }
   },
-  plugins: [animate],
+  plugins: [
+    animate,
+    require('tailwind-scrollbar-hide')
+  ],
 };
