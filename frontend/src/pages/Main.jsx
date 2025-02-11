@@ -17,6 +17,7 @@ const Main = () => {
     const [current_component, setCurrentComponent] = useState('') 
     const [color, setColor] = useState('')
     const [image, setImage] = useState('')
+    const [rotate, setRotate] = useState(0)
 
     const [show, setShow] = useState({
         status: true,
@@ -72,9 +73,13 @@ const Main = () => {
         console.log('rotate element')
     }
 
-    const removeComponent = () => {
-        console.log('rotate element')
+    const removeComponent = (id) => {
+        const temp =  components.filter(c => c.id !== id)
+        setCurrentComponent('')
+        setComponents(temp)
     }
+
+    
 
     const remove_background = () => {
         const com = components.find(c => c.id === current_component.id)
@@ -83,8 +88,27 @@ const Main = () => {
         setImage("")
         setComponents([...temp, com])
     }
-
-
+ 
+    const createShape = (name, type) => {
+        const style = {
+            id: Date.now(),
+            name: name,
+            type,
+            left: 10,
+            top: 10,
+            opacity: 1,
+            width: 200,
+            height: 150,
+            rotate,
+            z_index: 2,
+            color: '#3c3c3d',
+            setCurrentComponent:(a) => setCurrentComponent(a),
+            moveElement,
+            resizeElement,
+            rotateElement
+        }
+        setComponents([...components, style])
+    }
 
     return (
         <div className='min-w-screen h-screen bg-black' >
@@ -135,9 +159,9 @@ const Main = () => {
                             }
                             {
                                 state === 'shape' && <div className='grid grid-cols-3 gap-2'>
-                                    <div className='h-[90px] bg-[#3c3c3d] cursor-pointer'></div>
-                                    <div className='h-[90px] bg-[#3c3c3d] cursor-pointer rounded-full'></div>
-                                    <div style={{clipPath: 'polygon(50% 0,100% 100%,0 100%)'}} className='h-[90px] bg-[#3c3c3d] cursor-pointer'></div>
+                                    <div onClick={()=> createShape('shape', 'rect')} className='h-[90px] bg-[#3c3c3d] cursor-pointer'></div>
+                                    <div onClick={()=> createShape('shape', 'circle')} className='h-[90px] bg-[#3c3c3d] cursor-pointer rounded-full'></div>
+                                    <div onClick={()=> createShape('shape', 'triangle')} style={{clipPath: 'polygon(50% 0,100% 100%,0 100%)'}} className='h-[90px] bg-[#3c3c3d] cursor-pointer'></div>
                                 </div>
                             }
                             {
