@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Header from '../components/Header';
 import { LuLayoutTemplate } from 'react-icons/lu';
 import { FaCloudUploadAlt, FaFolderOpen, FaShapes, FaTextHeight, FaUpload } from 'react-icons/fa';
@@ -9,7 +9,6 @@ import TemplateDesign from './../components/main/TemplateDesign';
 import MyImages from '../components/MyImages';
 import Projects from '../components/Projects';
 import Images from '../components/Image';
-import { Link } from 'react-router-dom';
 import CreateComponenet from '../components/createComponent';
 
 const Main = () => {
@@ -17,11 +16,14 @@ const Main = () => {
     const [state, setState] = useState('')
     const [current_component, setCurrentComponent] = useState('') 
     const [color, setColor] = useState('')
+    const [image, setImage] = useState('')
 
     const [show, setShow] = useState({
         status: true,
         name: ''
     })
+
+    
 
     const setElements = (type,name) => {
         setState(type)
@@ -45,6 +47,19 @@ const Main = () => {
         }
     ]) 
 
+    useEffect(()=> {
+        if(current_component){
+            const index = components.findIndex(c => c.id === current_component.id)
+            const temp = components.filter(c => c.id !== current_component.id)
+            if (current_component.name === 'main_frame' && image){
+                components[index].image = image || current_component.image
+            }
+            components[index].color = color || current_component.color
+
+            setComponents([...temp, components[index]])
+        }
+    },[color,image])
+
     const moveElement = () => {
         console.log('move element')
     }
@@ -59,6 +74,14 @@ const Main = () => {
 
     const removeComponent = () => {
         console.log('rotate element')
+    }
+
+    const remove_background = () => {
+        const com = components.find(c => c.id === current_component.id)
+        const temp = components.filter(c => c.id !== current_component.id)
+        com.image = ''
+        setImage("")
+        setComponents([...temp, com])
     }
 
 
@@ -142,7 +165,7 @@ const Main = () => {
                                     <div className='grid grid-cols-2 gap-2'>
                                         {
                                         [1,2,3,4,5,6].map((img,i) => 
-                                        <div key={i} className='w-full h-[90px] overflow-hidden rounded-sm cursor-pointer'>
+                                        <div onClick={() => setImage('http://localhost:5173/images/admin.png')} key={i} className='w-full h-[90px] overflow-hidden rounded-sm cursor-pointer'>
                                             <img className='w-full h-full object-fill' src='http://localhost:5173/images/banner/1.jpg' alt='' />
                                         </div>
                                          )
@@ -174,7 +197,14 @@ const Main = () => {
                         <span>Color: </span>
                         <label className='w-[30px] h-[30px] cursor-pointer rounded-sm' style={{background: `${current_component.color && current_component.color !== '#fff' ? current_component.color : 'gray'}`}} htmlFor='color'></label>
                         <input onChange={(e) => setColor(e.target.value)} type='color' id='color' className='invisible'/>
+
+                       
                     </div>
+                    {
+                            (current_component.name === 'main_frame' && current_component.image) && <div className='p-[6px] bg-slate-600 text-white cursor-pointer' onClick={remove_background}>
+                                Remove Background 
+                            </div>
+                        }
                 </div>
             </div>
           }
