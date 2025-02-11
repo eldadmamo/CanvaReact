@@ -18,6 +18,8 @@ const Main = () => {
     const [color, setColor] = useState('')
     const [image, setImage] = useState('')
     const [rotate, setRotate] = useState(0)
+    const [left, setLeft] = useState('')
+    const [top, setTop] = useState('')
 
     const [show, setShow] = useState({
         status: true,
@@ -55,14 +57,48 @@ const Main = () => {
             if (current_component.name === 'main_frame' && image){
                 components[index].image = image || current_component.image
             }
+
+            if(current_component.name !== 'main_frame'){
+                components[index].left = left || current_component.left
+                components[index].top = top || current_component.top
+               }
+
             components[index].color = color || current_component.color
 
             setComponents([...temp, components[index]])
-        }
-    },[color,image])
+            setColor('')
+            setLeft('')
+            setTop('')
 
-    const moveElement = () => {
-        console.log('move element')
+        }
+    },[color,image,left,top])
+
+    const moveElement = (id,currentInfo) => {
+        setCurrentComponent(currentInfo)
+        let inMoving = true;
+
+        const currentDiv = document.getElementById(id)
+
+        const mouseMove = ({movementX,movementY}) => {
+            const getStyle = window.getComputedStyle(currentDiv)
+            const left = parseInt(getStyle.left)
+            const top = parseInt(getStyle.top)
+            if(inMoving){
+                currentDiv.style.left = `${left + movementX}px`
+                currentDiv.style.top = `${top + movementY}px`
+            }
+        }
+
+        const mouseUp = (e) => {
+            let isMoving = false;
+            window.removeEventListener('mousemove', mouseMove)
+            window.removeEventListener('mouseup', mouseUp)
+            setLeft(parseInt(currentDiv.style.left))
+            setTop(parseInt(currentDiv.style.top))
+        }
+
+        window.addEventListener('mousemove', mouseMove)
+        window.addEventListener('mouseup', mouseUp)
     }
 
     const resizeElement = () => {

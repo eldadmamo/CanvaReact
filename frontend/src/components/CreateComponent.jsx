@@ -3,7 +3,7 @@ import { FaTrashAlt } from 'react-icons/fa';
 import Element from './Element';
 
 const CreateComponenet = ({current_component,info,removeComponent}) => {
-    console.log(info)
+    // console.log(info)
     const randValue = Math.floor(Math.random() * 100)
 
 
