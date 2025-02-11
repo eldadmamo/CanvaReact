@@ -63,7 +63,7 @@ const CreateComponenet = ({current_component,info,removeComponent}) => {
             <div id={`${randValue}c`} className='rounded-full' 
             style={{
             width: info.width + 'px',
-            height: info.height + 'px',
+            height: info.width + 'px',
             background: info.color,
             opacity: info.opacity,
             }}>
