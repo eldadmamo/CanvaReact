@@ -26,8 +26,10 @@ const Main = () => {
     const [padding, setPadding] = useState('')
     const [font, setFont] = useState('')
     const [weight, setWeight] = useState('')
+
     const [text, setText] = useState('')
     const [opacity, setOpacity] = useState('')
+    const [zIndex, setzIndex] = useState('')
 
     const [show, setShow] = useState({
         status: true,
@@ -66,6 +68,14 @@ const Main = () => {
             if(current_component.name !== 'text'){
                 components[index].width = width || current_component.width
                 components[index].height = height || current_component.height
+                components[index].rotate = rotate || current_component.rotate
+            }
+
+            if(current_component.name === 'text'){
+                components[index].font = font || current_component.font
+                components[index].padding = padding || current_component.padding 
+                components[index].weight = weight || current_component.weight
+                components[index].title = text || current_component.title
             }
 
             if (current_component.name === 'main_frame' && image){
@@ -76,6 +86,7 @@ const Main = () => {
                 components[index].left = left || current_component.left
                 components[index].top = top || current_component.top
                 components[index].opacity = opacity || current_component.opacity
+                components[index].z_index = zIndex || current_component.z_index
                }
 
             components[index].color = color || current_component.color
@@ -88,9 +99,10 @@ const Main = () => {
             setHeight('')
             setRotate(0)
             setOpacity('')
-
+            setzIndex('') 
+            setText('')
         }
-    },[color,image,left,top, width,height,opacity] )
+    },[color,image,left,top, width,height,opacity,zIndex,padding,font,weight,text] )
 
     const moveElement = (id,currentInfo) => {
         setCurrentComponent(currentInfo)
@@ -376,11 +388,40 @@ const Main = () => {
                             </div>
                     }
                     {
-                        current_component.name !== 'main_frame' && <div className='flex gap-6'>
+                        current_component.name !== 'main_frame' && <div className='flex gap-6 flex-col'>
                             <div className='flex gap-1 justify-start items-start'>
                                 <span className='text-md w-[70px]'>Opacity</span>
                                 <input onChange={opacityHandle} className='w-[70px] border border-gray-700 bg-transparent outline-none px-2 rounded-md' type='number' step={0.1} min={0.1} max={1} value={current_component.opacity} />
                             </div>
+
+                            <div className='flex gap-1 justify-start items-start'>
+                                <span className='text-md w-[70px]'>Z-Index</span>
+                                <input onChange={(e) => setzIndex(parseInt(e.target.value))} className='w-[70px] border border-gray-700 bg-transparent outline-none px-2 rounded-md' type='number' step={1}  value={current_component.z_index} />
+                            </div>
+                            {
+                              current_component.name === 'text' && <>
+                            <div className='flex gap-1 justify-start items-start'>
+                                <span className='text-md w-[70px]'>Padding : </span>
+                                <input onChange={(e) => setPadding(parseInt(e.target.value))} className='w-[70px] border border-gray-700 bg-transparent outline-none px-2 rounded-md' type='number' step={1}  value={current_component.padding} />
+                            </div>
+                            <div className='flex gap-1 justify-start items-start'>
+                                <span className='text-md w-[70px]'>Font Size:</span>
+                                <input onChange={(e) => setFont(parseInt(e.target.value))} className='w-[70px] border border-gray-700 bg-transparent outline-none px-2 rounded-md' type='number' step={1}  value={current_component.font} />
+                            </div>
+                            <div className='flex gap-1 justify-start items-start'>
+                                <span className='text-md w-[70px]'>Weight : </span>
+                                <input onChange={(e) => setWeight(parseInt(e.target.value))} className='w-[70px] border border-gray-700 bg-transparent outline-none px-2 rounded-md' type='number' step={100} min={100} max={900}  value={current_component.weight} />
+                            </div>
+                            <div className='flex gap-2 flex-col justify-start items-start'>
+                                
+                                <input onChange={(e) => setCurrentComponent({
+                                    ...current_component,
+                                    title: e.target.value
+                                })} className='border border-gray-700 bg-transparent outline-none p-2 rounded-md' type='text'  value={current_component.title} />
+                                <button onClick={()=> setText(current_component.title)} className='px-4 py-2 bg-purple-500 text-xs text-white rounded-sm'>Add text</button>
+                            </div>
+                              </>  
+                            }
                         </div>
                     }
                 </div>

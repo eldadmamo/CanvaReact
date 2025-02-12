@@ -125,7 +125,6 @@ const CreateComponenet = ({current_component,info,removeComponent}) => {
 
             padding: info.padding + 'px',
             color: info.color,
-            top: info.top + 'px',
             opacity: info.opacity,
         }}
         className='absolute group hover:border-[2px] hover:border-indigo-500'
