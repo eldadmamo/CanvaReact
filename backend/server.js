@@ -41,6 +41,7 @@ const dbConnect = async () => {
 }
 dbConnect()
 
+app.use('/api', require('./routes/designRoutes'))
 app.use('/api', require('./routes/authRoutes'))
 
 const PORT = process.env.PORT;
