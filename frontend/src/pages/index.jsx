@@ -47,6 +47,27 @@ const Index = () => {
         }
     }
 
+    const user_login = async (e) => {
+        e.preventDefault()
+
+
+        try{
+            setLoader(true)
+            const {data} = await api.post('/api/user-login', state)
+            setLoader(false)
+            localStorage.setItem('canva_token', data.token)
+            setState({
+                name: ' ',
+                email: ' ',
+                password: ' '
+            })
+            window.location.href = '/'
+        } catch(error){
+            setLoader(false)
+            console.log(error.response)
+        }
+    }
+
 
     return (
         <div className='bg-[#18191b] min-h-screen w-full'>
@@ -58,7 +79,7 @@ const Index = () => {
 
                      {
                         type === 'signin' && 
-                        <form>
+                        <form onSubmit={user_login}>
                         <div className='flex flex-col gap-3 mb-3 text-white'>
                             <label htmlFor='email'>Email</label>
                             <input onChange={inputHandle} value={state.email} type='email' name='email' id='email' placeholder='email' className='px-3 py-2 rounded-md border outline-none border-[#5c5c5e] focus:border-purple-500 bg-transparent'/>

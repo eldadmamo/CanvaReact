@@ -5,11 +5,15 @@ import Templates from './components/Templates'
 import Projects from './components/Projects'
 import CreateDesign from './components/CreateDesign'
 import Main from './pages/Main'
+import { token_decode } from './utils/index'
+import Layout from './pages/Layout'
+
+const userInfo = token_decode(localStorage.getItem('canva_token'))
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Index/>,
+    element: userInfo ? <Layout/>:  <Index/>,
     children: [
       {
         path: '/',
