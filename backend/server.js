@@ -6,11 +6,12 @@ const { default: mongoose } = require("mongoose")
 const path = require("path")
 
 dotenv.config()
+app.use(express.json())
 
 if (process.env.NODE_ENV === 'local'){
     app.use(cors({
-        origin: 'http://localhost:3000',
-        credential: true
+        origin: 'http://localhost:5173',
+        credentials: true
     }))
  } else {
     app.use(cors({
@@ -39,6 +40,8 @@ const dbConnect = async () => {
     }
 }
 dbConnect()
+
+app.use('/api', require('./routes/authRoutes'))
 
 const PORT = process.env.PORT;
 app.listen(PORT, () => console.log(`Server is running in ${PORT}`))
