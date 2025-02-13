@@ -2,10 +2,12 @@ const {formidable} = require('formidable')
 const cloudinary = require('cloudinary').v2
 const designModel = require('../models/designModel')
 const userImageModel = require('../models/userImageModel')
-
+const templateModel = require('../models/templateModels')
 const designImageModel = require('../models/designImageModel')
 const backgroundImageModel = require('../models/backgroundImageModel')
 const {mongo: {ObjectId}} = require('mongoose') 
+
+
 
 class designController{
 
@@ -140,6 +142,56 @@ class designController{
         try{
             const images = await designImageModel.find({})
             return res.status(200).json({images})
+        }catch(error){
+            console.log(error)
+            return res.status(500).json({message: error.message})
+        }
+    }
+
+    get_user_designs = async (req, res) => {
+        const {_id} = req.userInfo;
+
+        try{
+            const designs = await designModel.find({user_id:new ObjectId(_id)}).sort({createdAt: -1}) 
+            return res.status(200).json({ designs })
+        } catch(error){
+            console.log(error)
+            return res.status(500).json({message: error.message})
+        }
+    }
+
+    delete_user_image  = async (req,res) => {
+        const {design_id} = req.params;
+        try{
+            await designModel.findByIdAndDelete(design_id);
+            return res.status(200).json({ message : 'Design Delete Success' })
+        } catch(error){
+            return res.status(500).json({message: error.message})
+        }
+    }
+
+    get_templates = async (req,res) => {
+        try{
+            const templates = await templateModel.find({}).sort({createdAt: -1})
+            return res.status(200).json({templates})
+        }catch(error){
+            console.log(error)
+            return res.status(500).json({message: error.message})
+        }
+    }
+
+    add_user_template = async (req, res) => {
+        const {template_id} = req.params;
+        const {_id} = req.userInfo
+
+        try{
+            const template = await templateModel.findById(template_id)
+            const design = await designModel.create({
+                user_id: _id,
+                components: template.components,
+                image_url: template.image_url
+            })
+            return res.status(200).json({design})
         }catch(error){
             console.log(error)
             return res.status(500).json({message: error.message})

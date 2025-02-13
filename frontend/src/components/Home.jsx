@@ -1,13 +1,17 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { FaTrashAlt } from 'react-icons/fa';
 import useEmblaCarousel from 'embla-carousel-react';
 import Autoplay from 'embla-carousel-autoplay';
 import { Link, useNavigate } from 'react-router-dom';
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import api from '../utils/api';
+import Item from './Home/item';
+import toast from 'react-hot-toast';
 
 const Home = () => {
     const navigate = useNavigate()
 
+    const [designs, setDesign] = useState([]) 
     const [show, setShow] = useState(false);
     const [state, setState] = useState({
         width: '',
@@ -41,6 +45,34 @@ const Home = () => {
             }
         })
     }
+
+    const get_user_design = async () => {
+            try{
+                const {data} = await api.get('/api/user-designs')
+                setDesign(data.designs)
+
+            }catch(error){
+                console.log(error)
+            }
+    }
+       
+    useEffect(()=> {
+        get_user_design()
+    },[])
+
+  
+    const delete_design = async (design_id) => {
+            try{
+                const {data} = await api.put(`/api/delete-user-image/${design_id}`)
+                toast.success(data.message)
+                get_user_design()
+            } catch(error){
+                toast.error(error.response.data.message)
+            }
+    }
+    
+
+    
 
     return (
         <div className='pt-1 pl-3'>
@@ -77,16 +109,10 @@ const Home = () => {
                 <div className="embla relative">
                     <div className="embla__viewport overflow-hidden" ref={emblaRef}>
                         <div className="embla__container flex gap-3">
-                            {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((d, i) => (
-                                <div key={i} className='relative group embla__slide flex-shrink-0 w-[calc(20%-12px)]'>
-                                    <Link className='w-full h-full block bg-slate-100 p-4 rounded-md'>
-                                        <img className='w-full h-full rounded-md overflow-hidden' src='http://localhost:5173/images/banner/1.jpg' alt='' />
-                                    </Link>
-                                    <div className='absolute hidden cursor-pointer top-1 right-2 text-red-500 p-2 transition-all duration-500 group-hover:block'>
-                                        <FaTrashAlt />
-                                    </div>
-                                </div>
-                            ))}
+                            {
+                            designs.map((d, i) => 
+                                <Item delete_design={delete_design} design={d} key={i}/>
+                            )}
                         </div>
                     </div>
 

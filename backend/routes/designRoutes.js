@@ -14,6 +14,14 @@ router.get('/get-user-image',auth, designController.get_user_image)
 router.get('/background-images',auth, designController.get_background_image)
 router.get('/design-images', auth, designController.get_design_image)
 
+router.get('/user-designs', auth,designController.get_user_designs)
+
+router.put('/delete-user-image/:design_id', auth , designController.delete_user_image)
+
+router.get('/templates', auth , designController.get_templates)
+
+router.get('/add-user-template/:template-id', auth , designController.add_user_template)
+
 
 
 

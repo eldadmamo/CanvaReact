@@ -8,7 +8,6 @@ import {MdKeyboardArrowLeft} from 'react-icons/md'
 import TemplateDesign from './../components/main/TemplateDesign';
 import MyImages from '../components/MyImages';
 import Projects from '../components/Projects';
-import Images from '../components/Image';
 import CreateComponenet from '../components/createComponent';
 import api from '../utils/api'
 import { useParams } from 'react-router-dom';
@@ -394,7 +393,7 @@ const Main = () => {
                                 </div>
                             }
                             {
-                                state === 'project' && <Projects/>
+                                state === 'project' && <Projects type='main' design_id={design_id}/>
                             }
                             {
                                 state === 'initImage' && <div className='h-[88vh] overflow-x-auto flex justify-start items-start scrollbar-hide'>
