@@ -380,7 +380,7 @@ const Main = () => {
                                 </div>
                             }
                             {
-                                state === 'image' && <MyImages/>
+                                state === 'image' && <MyImages add_image={add_image}/>
                             }
                             {
                                 state === 'text' && <div>

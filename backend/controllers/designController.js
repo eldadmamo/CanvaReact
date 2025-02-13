@@ -1,6 +1,8 @@
 const {formidable} = require('formidable')
 const cloudinary = require('cloudinary').v2
 const designModel = require('../models/designModel')
+const userImageModel = require('../models/userImageModel')
+const {mongo: {ObjectId}} = require('mongoose') 
 
 class designController{
 
@@ -79,6 +81,45 @@ class designController{
             return res.status(500).json({message: error.message})
         }
     }
+
+    add_user_image = async(req,res) => {
+        const {_id} = req.userInfo;
+        const form = formidable({})
+        
+        cloudinary.config({
+            cloud_name: process.env.cloud_name,
+            api_key: process.env.api_key,
+            api_secret: process.env.api_secret,
+        })
+        
+        try{
+            const [_,files] = await form.parse(req);
+            const {image} = files
+
+            const {url} = await cloudinary.uploader.upload(image[0].filepath)
+
+            const userImage = await userImageModel.create({
+                user_id: _id,
+                image_url: url
+            })
+            return res.status(200).json({userImage: userImage})
+
+        }catch(error){
+            return res.status(404).json({message: error.message})
+        }
+    }
+
+    get_user_image = async (req,res) => {
+        const {_id} = req.userInfo;
+        try{
+            const images = await userImageModel.find({user_id:new ObjectId(_id)})
+            return res.status(200).json({images})
+        } catch(error){
+            console.log(error)
+            return res.status(404).json({message: error.message})
+        }
+    }
+    //End Method
 }
 
 module.exports = new designController()
