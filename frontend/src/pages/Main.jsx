@@ -10,9 +10,12 @@ import MyImages from '../components/MyImages';
 import Projects from '../components/Projects';
 import Images from '../components/Image';
 import CreateComponenet from '../components/createComponent';
+import api from '../utils/api'
+import { useParams } from 'react-router-dom';
 
 const Main = () => {
 
+    const {design_id} = useParams()
     const [state, setState] = useState('')
     const [current_component, setCurrentComponent] = useState('') 
     const [color, setColor] = useState('')
@@ -110,7 +113,7 @@ const Main = () => {
         }
     },[color,image,left,top, width,height,opacity,zIndex,padding,font,weight,text,radius] )
 
-    const moveElement = (id,currentInfo) => {
+    const moveElement = (id, currentInfo) => {
         setCurrentComponent(currentInfo)
         let inMoving = true;
 
@@ -298,6 +301,29 @@ const Main = () => {
         setComponents([...components, style])
 
     }
+
+    useEffect(()=> {
+        const get_design = async () => {
+            try{
+                const {data} = await api.get(`/api/user-design/${design_id}`)
+                console.log(data)
+                const {design} = data
+
+                for(let i=0; i < design.length; i++){
+                    design[i].setCurrentComponent = (a) => setCurrentComponent(a)
+                    design[i].moveElement = moveElement
+                    design[i].resizeElement = resizeElement
+                    design[i].rotateElement = rotateElement
+                    design[i].remove_background = remove_background
+                }
+                setComponents(design)
+
+            } catch(error){
+                console.log(error)
+            }
+        }
+        get_design()
+    },[design_id])
 
     return (
         <div className='min-w-screen h-screen bg-black' >
