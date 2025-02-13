@@ -12,6 +12,8 @@ import Images from '../components/Image';
 import CreateComponenet from '../components/createComponent';
 import api from '../utils/api'
 import { useParams } from 'react-router-dom';
+import BackgroundImages from './../components/BackgroundImages';
+import InitialImage from '../components/initialImage';
 
 const Main = () => {
 
@@ -396,20 +398,12 @@ const Main = () => {
                             }
                             {
                                 state === 'initImage' && <div className='h-[88vh] overflow-x-auto flex justify-start items-start scrollbar-hide'>
-                                    <Images add_image={add_image} />
+                                    <InitialImage  add_image={add_image}/>
                                 </div>
                             }
                             {
-                                state === 'background' && <div className='h-[88vh] overflow-x-auto flex justify-start items-start scrollbar-hide w-full'>
-                                    <div className='grid grid-cols-2 gap-2'>
-                                        {
-                                        [1,2,3,4,5,6].map((img,i) => 
-                                        <div onClick={() => setImage('http://localhost:5173/images/admin.png')} key={i} className='w-full h-[90px] overflow-hidden rounded-sm cursor-pointer'>
-                                            <img className='w-full h-full object-fill' src='http://localhost:5173/images/banner/1.jpg' alt='' />
-                                        </div>
-                                         )
-                                        }
-                                    </div>
+                                state === 'background' && <div className='h-[88vh] overflow-x-auto flex justify-start items-start scrollbar-hide '>
+                                    <BackgroundImages type='background' setImage={setImage}  />
                                 </div>
                             }
                         </div>
